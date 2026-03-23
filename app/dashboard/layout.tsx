@@ -22,7 +22,7 @@ export default function DashboardLayout({
         <div className="mb-14">
           <Link href="/dashboard">
             <div className="w-11 h-11 bg-blue-600 rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(37,99,235,0.4)] cursor-pointer hover:scale-105 transition-all border border-blue-400/30">
-              <span className="text-white font-black text-xs italic">ZW</span>
+              <span className="text-white font-black text-xs italic">F</span>
             </div>
           </Link>
         </div>

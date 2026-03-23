@@ -120,7 +120,7 @@ export default function OEEDashboard() {
               <span className="text-blue-500">Live Analytics</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase italic">
-              ZEWELL <span className="text-blue-600">OEE Monitoring</span>
+              FOSTEC <span className="text-blue-600">OEE Monitoring</span>
             </h1>
           </div>
 

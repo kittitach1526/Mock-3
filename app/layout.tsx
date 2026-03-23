@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ZEWELL Smart Node",
+  title: "FOSTEC IoT Monitoring System v3.0",
   description: "IoT Monitoring System v3.0 by Sphx",
 };
 
