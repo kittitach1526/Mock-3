@@ -49,9 +49,9 @@ const MOCK_USERS = [
     role: "Administrator"
   },
   {
-    username: "kai-tun", // ชื่อแฟนคุณ (ตาม Summary 😉)
-    password: "456",
-    role: "Operator"
+    username: "user", // ชื่อแฟนคุณ (ตาม Summary 😉)
+    password: "1234",
+    role: "User"
   }
 ];
 

@@ -1,6 +1,47 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+interface SettingsTabProps {
+  label: string;
+  icon: string;
+  href: string; // เพิ่ม href เพื่อบอกว่าจะให้ Link ไปที่ไหน
+}
+
+function SettingsTab({ label, icon, href }: SettingsTabProps) {
+  const pathname = usePathname();
+  
+  // เช็คว่า URL ปัจจุบันตรงกับ href ของปุ่มนี้หรือไม่ 
+  // (รองรับทั้งแบบตรงเป๊ะ และแบบที่เป็นหน้าย่อยในหมวดนั้น)
+  const isActive = pathname === href || pathname.startsWith(`${href}/`);
+
+  return (
+    <Link href={href} className="block w-full group">
+      <div className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 border ${
+        isActive 
+          ? 'bg-blue-600/10 border-blue-500/30 text-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.1)]' 
+          : 'border-transparent text-slate-500 hover:text-slate-200 hover:bg-slate-800/40'
+      }`}>
+        {/* Icon */}
+        <span className={`material-symbols-outlined transition-colors ${isActive ? 'text-blue-500' : 'group-hover:text-blue-400'}`}>
+          {icon}
+        </span>
+
+        {/* Label */}
+        <span className="text-[11px] font-black uppercase tracking-widest">
+          {label}
+        </span>
+        
+        {/* Blue Status Dot (ไฟสีฟ้าจะติดเมื่อ Active) */}
+        {isActive && (
+          <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(37,99,235,1)]"></div>
+        )}
+      </div>
+    </Link>
+  );
+}
 
 export default function SettingsPage() {
   // จำลองข้อมูลสมาชิกในทีม
@@ -37,11 +78,13 @@ export default function SettingsPage() {
         
         {/* Sidebar Settings Menu */}
         <aside className="xl:col-span-1 space-y-2">
-          <SettingsTab label="Account Security" icon="shield_lock" active />
-          <SettingsTab label="Member Access" icon="group" />
-          <SettingsTab label="System Webhooks" icon="webhook" />
-          <SettingsTab label="Alert Notifications" icon="notifications_active" />
-          <SettingsTab label="Cloud Integration" icon="cloud" />
+          <SettingsTab label="Account Management" icon="shield_lock" href="/dashboard/settings" />
+          <SettingsTab label="Member Access" icon="group" href="/dashboard/memberRoleSetting" />
+          <SettingsTab label="Permissions" icon="key_vertical" href="/dashboard/roleSetting" />
+          {/*}
+          <SettingsTab label="Alert Notifications" icon="notifications_active" href="/"/>
+          <SettingsTab label="Cloud Integration" icon="cloud" href="/"/>*/}
+
         </aside>
 
         {/* Member List Table */}
@@ -123,14 +166,14 @@ export default function SettingsPage() {
 
 // --- Internal UI Components ---
 
-function SettingsTab({ label, icon, active }: { label: string, icon: string, active?: boolean }) {
-  return (
-    <button className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 border ${
-      active ? 'bg-blue-600/10 border-blue-500/30 text-blue-500 shadow-lg' : 'border-transparent text-slate-500 hover:text-slate-200 hover:bg-slate-800/40'
-    }`}>
-      <span className="material-symbols-outlined">{icon}</span>
-      <span className="text-[11px] font-black uppercase tracking-widest">{label}</span>
-      {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(37,99,235,1)]"></div>}
-    </button>
-  );
-}
+// function SettingsTab({ label, icon, active }: { label: string, icon: string, active?: boolean }) {
+//   return (
+//     <button className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 border ${
+//       active ? 'bg-blue-600/10 border-blue-500/30 text-blue-500 shadow-lg' : 'border-transparent text-slate-500 hover:text-slate-200 hover:bg-slate-800/40'
+//     }`}>
+//       <span className="material-symbols-outlined">{icon}</span>
+//       <span className="text-[11px] font-black uppercase tracking-widest">{label}</span>
+//       {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(37,99,235,1)]"></div>}
+//     </button>
+//   );
+// }
