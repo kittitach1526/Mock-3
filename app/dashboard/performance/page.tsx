@@ -5,16 +5,31 @@ import React from "react";
 /**
  * Performance Page - ZEWELL Industrial Monitoring
  * แสดงผลค่า Performance แยกรายเครื่องจักรในรูปแบบ Gauge Chart
+ * 
+ * 
  */
+
+import useSWR from "swr";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 export default function PerformancePage() {
+
+
+  const { data: cncStatusData, isLoading: isMachineStatusLoading } = useSWR("/api/cnc", fetcher, { refreshInterval: 1000 });
+  const { data: pressStatusData, isLoading: isPressStatusLoading } = useSWR("/api/press", fetcher, { refreshInterval: 1000 });
+  const { data: latheStatusData, isLoading: isLatheStatusLoading } = useSWR("/api/lathe", fetcher, { refreshInterval: 1000 });
+  const { data: weldStatusData, isLoading: isWeldStatusLoading } = useSWR("/api/weld", fetcher, { refreshInterval: 1000 });
+  const { data: assyStatusData, isLoading: isAssyStatusLoading } = useSWR("/api/assy", fetcher, { refreshInterval: 1000 });
+  const { data: paintStatusData, isLoading: isPaintStatusLoading } = useSWR("/api/paint", fetcher, { refreshInterval: 1000 });
   // ข้อมูลจำลองสำหรับแสดงผล (ในอนาคตเปลี่ยนเป็น useSWR ดึงจาก API)
   const performanceData = [
-    { id: "CNC-01", line: "A", perf: 91, target: 85, actual: 95, status: "running", oee: 87 },
-    { id: "Press-02", line: "A", perf: 88, target: 85, actual: 88, status: "running", oee: 72 },
-    { id: "Lathe-03", line: "B", perf: 81, target: 85, actual: 0, status: "breakdown", oee: 45 },
-    { id: "Weld-04", line: "B", perf: 94, target: 85, actual: 100, status: "running", oee: 91 },
-    { id: "Assy-05", line: "C", perf: 77, target: 85, actual: 0, status: "idle", oee: 68 },
-    { id: "Paint-06", line: "C", perf: 86, target: 85, actual: 86, status: "running", oee: 79 },
+    { id: "CNC-01", line: "A", perf: cncStatusData ? cncStatusData.perf : 0, target: 85, actual: 95, status: "running", oee: cncStatusData ? cncStatusData.oee : 0 },
+    { id: "Press-02", line: "A", perf: pressStatusData ? pressStatusData.perf : 0, target: 85, actual: 88, status: "running", oee: pressStatusData ? pressStatusData.oee : 0 },
+    { id: "Lathe-03", line: "B", perf: latheStatusData ? latheStatusData.perf : 0, target: 85, actual: 0, status: "breakdown", oee: latheStatusData ? latheStatusData.oee : 0 },
+    { id: "Weld-04", line: "B", perf: weldStatusData ? weldStatusData.perf : 0, target: 85, actual: 100, status: "running", oee: weldStatusData ? weldStatusData.oee : 0 },
+    { id: "Assy-05", line: "C", perf: assyStatusData ? assyStatusData.perf : 0, target: 85, actual: 0, status: "idle", oee: assyStatusData ? assyStatusData.oee : 0 },
+    { id: "Paint-06", line: "C", perf: paintStatusData ? paintStatusData.perf : 0, target: 85, actual: 86, status: "running", oee: paintStatusData ? paintStatusData.oee : 0 },
   ];
 
   return (

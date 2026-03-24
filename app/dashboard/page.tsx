@@ -10,19 +10,34 @@ export default function OEEDashboard() {
   const [mounted, setMounted] = useState(false);
 
   // --- 1. Fetching Data (จากโค้ดเดิมของคุณ) ---
-  const { data: overallData, error: overallError, isLoading: isOverallLoading } = useSWR("/api/overall", fetcher, { refreshInterval: 3000 });
-  const { data: availabilityData, isLoading: isAvailabilityLoading } = useSWR("/api/availability", fetcher, { refreshInterval: 3000 });
-  const { data: performanceData, isLoading: isPerformanceLoading } = useSWR("/api/performance", fetcher, { refreshInterval: 3000 });
-  const { data: qualityData, isLoading: isQualityLoading } = useSWR("/api/quality", fetcher, { refreshInterval: 3000 });
+  const { data: overallData, error: overallError, isLoading: isOverallLoading } = useSWR("/api/overall", fetcher, { refreshInterval: 1000 });
+  const { data: availabilityData, isLoading: isAvailabilityLoading } = useSWR("/api/availability", fetcher, { refreshInterval: 1000 });
+  const { data: performanceData, isLoading: isPerformanceLoading } = useSWR("/api/performance", fetcher, { refreshInterval: 1000 });
+  const { data: qualityData, isLoading: isQualityLoading } = useSWR("/api/quality", fetcher, { refreshInterval: 1000 });
+
+  const { data: cncStatusData, isLoading: isMachineStatusLoading } = useSWR("/api/cnc", fetcher, { refreshInterval: 1000 });
+  const { data: pressStatusData, isLoading: isPressStatusLoading } = useSWR("/api/press", fetcher, { refreshInterval: 1000 });
+  const { data: latheStatusData, isLoading: isLatheStatusLoading } = useSWR("/api/lathe", fetcher, { refreshInterval: 1000 });
+  const { data: weldStatusData, isLoading: isWeldStatusLoading } = useSWR("/api/weld", fetcher, { refreshInterval: 1000 });
+  const { data: assyStatusData, isLoading: isAssyStatusLoading } = useSWR("/api/assy", fetcher, { refreshInterval: 1000 });
+  const { data: paintStatusData, isLoading: isPaintStatusLoading } = useSWR("/api/paint", fetcher, { refreshInterval: 1000 });
+
+  const {data: breakdownData, isLoading: isBreakdownLoading} = useSWR("/api/breakdown", fetcher, { refreshInterval: 1000 });
+  const {data: changeoverData, isLoading: isChangeoverLoading} = useSWR("/api/changeover", fetcher, { refreshInterval: 1000 });
+  const {data: smallStopsData, isLoading: isSmallStopsLoading} = useSWR("/api/smallStop", fetcher, { refreshInterval: 1000 });
+  const {data: reducedSpeedData, isLoading: isReducedSpeedLoading} = useSWR("/api/reducedSpeed", fetcher, { refreshInterval: 1000 });
+  const {data: startupRejectsData, isLoading: isStartupRejectsLoading} = useSWR("/api/startupReject", fetcher, { refreshInterval: 1000 });
+  const {data: prodRejectsData, isLoading: isProdRejectsLoading} = useSWR("/api/prodReject", fetcher, { refreshInterval: 1000 });
+
 
   // ข้อมูลจำลองสำหรับ Machine Board & Alerts (ตามรูปที่เพิ่มมา)
   const machines = [
-    { id: "CNC-01", status: "RUNNING", oee: 87, a: 92, p: 91, q: 97, color: "emerald" },
-    { id: "Press-02", status: "RUNNING", oee: 72, a: 78, p: 88, q: 95, color: "emerald" },
-    { id: "Lathe-03", status: "BREAKDOWN", oee: 45, a: 52, p: 81, q: 93, color: "red" },
-    { id: "Weld-04", status: "RUNNING", oee: 91, a: 95, p: 94, q: 98, color: "emerald" },
-    { id: "Assy-05", status: "IDLE", oee: 68, a: 85, p: 77, q: 96, color: "amber" },
-    { id: "Paint-06", status: "RUNNING", oee: 79, a: 88, p: 86, q: 97, color: "emerald" },
+    { id: "CNC-01", status: "RUNNING", oee: cncStatusData?.oee || 0, a: cncStatusData?.avail || 0, p: cncStatusData?.perf || 0, q: cncStatusData?.qual || 0, color: "emerald" },
+    { id: "Press-02", status: "RUNNING", oee: pressStatusData?.oee || 0, a: pressStatusData?.avail || 0, p: pressStatusData?.perf || 0, q: pressStatusData?.qual || 0, color: "emerald" },
+    { id: "Lathe-03", status: "BREAKDOWN", oee: latheStatusData?.oee || 0, a: latheStatusData?.avail || 0, p: latheStatusData?.perf || 0, q: latheStatusData?.qual || 0, color: "red" },
+    { id: "Weld-04", status: "RUNNING", oee: weldStatusData?.oee || 0, a: weldStatusData?.avail || 0, p: weldStatusData?.perf || 0, q: weldStatusData?.qual || 0, color: "emerald" },
+    { id: "Assy-05", status: "IDLE", oee: assyStatusData?.oee || 0, a: assyStatusData?.avail || 0, p: assyStatusData?.perf || 0, q: assyStatusData?.qual || 0, color: "amber" },
+    { id: "Paint-06", status: "RUNNING", oee: paintStatusData?.oee || 0, a: paintStatusData?.avail || 0, p: paintStatusData?.perf || 0, q: paintStatusData?.qual || 0, color: "emerald" },
   ];
 
   useEffect(() => {
@@ -81,12 +96,12 @@ export default function OEEDashboard() {
              Six Big Losses
           </h2>
           <div className="space-y-7 flex-grow">
-            <LossBar label="Breakdowns" val={38} color="bg-red-500" cat="Avail" />
-            <LossBar label="Setup/Changeover" val={26} color="bg-orange-500" cat="Avail" />
-            <LossBar label="Small Stops" val={14} color="bg-yellow-500" cat="Perf" />
-            <LossBar label="Reduced Speed" val={11} color="bg-blue-500" cat="Perf" />
-            <LossBar label="Startup Rejects" val={6} color="bg-purple-500" cat="Qual" />
-            <LossBar label="Prod. Rejects" val={5} color="bg-indigo-500" cat="Qual" />
+            <LossBar label="Breakdowns" val={breakdownData?.value || 0} color="bg-red-500" cat="Avail" />
+            <LossBar label="Setup/Changeover" val={changeoverData?.value || 0} color="bg-orange-500" cat="Avail" />
+            <LossBar label="Small Stops" val={smallStopsData?.value || 0} color="bg-yellow-500" cat="Perf" />
+            <LossBar label="Reduced Speed" val={reducedSpeedData?.value || 0} color="bg-blue-500" cat="Perf" />
+            <LossBar label="Startup Rejects" val={startupRejectsData?.value || 0} color="bg-purple-500" cat="Qual" />
+            <LossBar label="Prod. Rejects" val={prodRejectsData?.value || 0} color="bg-indigo-500" cat="Qual" />
           </div>
           <div className="mt-10 grid grid-cols-2 gap-4 pt-6 border-t border-slate-800/40">
              <div>
