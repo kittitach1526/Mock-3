@@ -24,14 +24,14 @@ const isActive = (paths: string[], exact?: boolean) => {
     {
       href: "/dashboard",
       icon: "dashboard",
-      label: "Home",
+      label: "OVERVIEW",
       match: ["/dashboard"],
       exact: true,
     },
     {
       href: "/dashboard/processes",
       icon: "analytics",
-      label: "Timeline",
+      label: "Equipment",
       match: [
         "/dashboard/processes",
         "/dashboard/realtime",
@@ -41,7 +41,7 @@ const isActive = (paths: string[], exact?: boolean) => {
     {
       href: "/dashboard/history",
       icon: "history",
-      label: "Logs",
+      label: "Availability",
       match: [
         "/dashboard/history",
         "/dashboard/logs",
@@ -51,7 +51,17 @@ const isActive = (paths: string[], exact?: boolean) => {
     {
       href: "/dashboard/settings",
       icon: "settings",
-      label: "Setup",
+      label: "Performance",
+      match: [
+        "/dashboard/settings",
+        "/dashboard/roleSetting",
+        "/dashboard/memberRoleSetting",
+      ]
+    },
+    {
+      href: "/dashboard/settings",
+      icon: "settings",
+      label: "Quality",
       match: [
         "/dashboard/settings",
         "/dashboard/roleSetting",
