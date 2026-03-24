@@ -29,43 +29,51 @@ const isActive = (paths: string[], exact?: boolean) => {
       exact: true,
     },
     {
-      href: "/dashboard/processes",
-      icon: "analytics",
+      href: "/dashboard/equipment",
+      icon: "precision_manufacturing",
       label: "Equipment",
       match: [
-        "/dashboard/processes",
-        "/dashboard/realtime",
-        "/dashboard/monitor"
+        "/dashboard/equipment",
       ]
     },
     {
-      href: "/dashboard/history",
+      href: "/dashboard/availability",
       icon: "history",
       label: "Availability",
       match: [
-        "/dashboard/history",
-        "/dashboard/logs",
-        "/dashboard/audit"
+        "/dashboard/availability",
       ]
     },
     {
-      href: "/dashboard/settings",
-      icon: "settings",
+      href: "/dashboard/performance",
+      icon: "speed",
       label: "Performance",
       match: [
-        "/dashboard/settings",
-        "/dashboard/roleSetting",
-        "/dashboard/memberRoleSetting",
+        "/dashboard/performance",
       ]
     },
     {
-      href: "/dashboard/settings",
-      icon: "settings",
+      href: "/dashboard/quality",
+      icon: "fact_check",
       label: "Quality",
       match: [
-        "/dashboard/settings",
-        "/dashboard/roleSetting",
-        "/dashboard/memberRoleSetting",
+        "/dashboard/quality",
+      ]
+    },
+    {
+      href: "/dashboard/analytics",
+      icon: "analytics",
+      label: "Analytics",
+      match: [
+        "/dashboard/analytics",
+      ]
+    },
+    {
+      href: "/dashboard/alerts",
+      icon: "notification_important",
+      label: "Alerts",
+      match: [
+        "/dashboard/alerts",
       ]
     }
   ];
@@ -80,14 +88,14 @@ const isActive = (paths: string[], exact?: boolean) => {
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 bottom-0 w-24 flex flex-col items-center py-10 bg-slate-900/40 backdrop-blur-2xl border-r border-slate-800/50 z-50">
         
-        {/* Logo */}
+        {/* Logo
         <div className="mb-14">
           <Link href="/dashboard">
             <div className="w-11 h-11 bg-blue-600 rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(37,99,235,0.4)] cursor-pointer hover:scale-105 transition-all border border-blue-400/30">
               <span className="text-white font-black text-xs italic">F</span>
             </div>
           </Link>
-        </div>
+        </div> */}
 
         {/* Menu */}
         <nav className="flex flex-col gap-6 w-full px-2">
