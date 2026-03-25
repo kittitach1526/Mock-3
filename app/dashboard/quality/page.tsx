@@ -12,11 +12,17 @@ import {
   Legend,
 } from "recharts";
 
+import useSWR from "swr";
+import { useSystemConfig } from '@/hooks/useConfig';
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 /**
  * Quality Dashboard Page
  * เน้นการวิเคราะห์คุณภาพการผลิต และสาเหตุของ Defect
  */
 export default function QualityPage() {
+  const { refreshInterval, isLoading: isConfigLoading } = useSystemConfig();
   // ข้อมูลจำลองสำหรับ Trend Chart
   const trendData = [
     { name: "Mon", oee: 82, avail: 90, perf: 85, qual: 96 },
@@ -27,6 +33,8 @@ export default function QualityPage() {
     { name: "Sat", oee: 75, avail: 80, perf: 78, qual: 95 },
     { name: "Sun", oee: 80, avail: 85, perf: 84, qual: 96 },
   ];
+
+  const {data: qualityParetoData, isLoading: isQualityParetoLoading} = useSWR("/api/quality_page", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
 
   return (
     <div className="p-8 max-w-[1600px] mx-auto space-y-8 animate-in fade-in duration-700">
@@ -64,11 +72,11 @@ export default function QualityPage() {
           </div>
           
           <div className="space-y-8">
-            <ParetoItem label="Dimensional Error" count={48} percent={42} color="bg-red-500" />
-            <ParetoItem label="Surface Defect" count={31} percent={27} color="bg-orange-500" />
-            <ParetoItem label="Assembly Error" count={19} percent={17} color="bg-amber-500" />
-            <ParetoItem label="Material Defect" count={11} percent={10} color="bg-blue-500" />
-            <ParetoItem label="Other" count={5} percent={4} color="bg-slate-500" />
+            <ParetoItem label="Dimensional Error" count={qualityParetoData?.demensional_error} percent={qualityParetoData?.demensional_error} color="bg-red-500" />
+            <ParetoItem label="Surface Defect" count={qualityParetoData?.surface_defect} percent={qualityParetoData?.surface_defect} color="bg-orange-500" />
+            <ParetoItem label="Assembly Error" count={qualityParetoData?.assembly_error} percent={qualityParetoData?.assembly_error} color="bg-amber-500" />
+            <ParetoItem label="Material Defect" count={qualityParetoData?.material_defect} percent={qualityParetoData?.material_defect} color="bg-blue-500" />
+            <ParetoItem label="Other" count={qualityParetoData?.other} percent={qualityParetoData?.other} color="bg-slate-500" />
           </div>
         </section>
 

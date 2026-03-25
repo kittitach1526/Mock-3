@@ -2,41 +2,44 @@
 
 import React from "react";
 import useSWR from "swr";
+import { useSystemConfig } from '@/hooks/useConfig';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function EquipmentPage() {
+  const { refreshInterval, isLoading: isConfigLoading } = useSystemConfig();
+
   const { data: cncStatusData, isLoading: isMachineStatusLoading } = useSWR(
     "/api/cnc",
     fetcher,
-    { refreshInterval: 1000 },
+    { refreshInterval: isConfigLoading ? 0 : refreshInterval },
   );
   const { data: pressStatusData, isLoading: isPressStatusLoading } = useSWR(
     "/api/press",
     fetcher,
-    { refreshInterval: 1000 },
+    { refreshInterval: isConfigLoading ? 0 : refreshInterval },
   );
   const { data: latheStatusData, isLoading: isLatheStatusLoading } = useSWR(
     "/api/lathe",
     fetcher,
-    { refreshInterval: 1000 },
+    { refreshInterval: isConfigLoading ? 0 : refreshInterval },
   );
   const { data: weldStatusData, isLoading: isWeldStatusLoading } = useSWR(
     "/api/weld",
     fetcher,
-    { refreshInterval: 1000 },
+    { refreshInterval: isConfigLoading ? 0 : refreshInterval },
   );
   const { data: assyStatusData, isLoading: isAssyStatusLoading } = useSWR(
     "/api/assy",
     fetcher,
-    { refreshInterval: 1000 },
+    { refreshInterval: isConfigLoading ? 0 : refreshInterval },
   );
   const { data: paintStatusData, isLoading: isPaintStatusLoading } = useSWR(
     "/api/paint",
     fetcher,
-    { refreshInterval: 1000 },
+    { refreshInterval: isConfigLoading ? 0 : refreshInterval },
   );
-  const {data: downtimeParetoData, isLoading: isDowntimeParetoLoading} = useSWR("/api/downtimePareto", fetcher, { refreshInterval: 1000 });
+  const {data: downtimeParetoData, isLoading: isDowntimeParetoLoading} = useSWR("/api/downtimePareto", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
 
   
 

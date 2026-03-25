@@ -10,18 +10,20 @@ import React from "react";
  */
 
 import useSWR from "swr";
+import { useSystemConfig } from '@/hooks/useConfig';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function PerformancePage() {
 
+  const { refreshInterval, isLoading: isConfigLoading } = useSystemConfig();
 
-  const { data: cncStatusData, isLoading: isMachineStatusLoading } = useSWR("/api/cnc", fetcher, { refreshInterval: 1000 });
-  const { data: pressStatusData, isLoading: isPressStatusLoading } = useSWR("/api/press", fetcher, { refreshInterval: 1000 });
-  const { data: latheStatusData, isLoading: isLatheStatusLoading } = useSWR("/api/lathe", fetcher, { refreshInterval: 1000 });
-  const { data: weldStatusData, isLoading: isWeldStatusLoading } = useSWR("/api/weld", fetcher, { refreshInterval: 1000 });
-  const { data: assyStatusData, isLoading: isAssyStatusLoading } = useSWR("/api/assy", fetcher, { refreshInterval: 1000 });
-  const { data: paintStatusData, isLoading: isPaintStatusLoading } = useSWR("/api/paint", fetcher, { refreshInterval: 1000 });
+  const { data: cncStatusData, isLoading: isMachineStatusLoading } = useSWR("/api/cnc", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: pressStatusData, isLoading: isPressStatusLoading } = useSWR("/api/press", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: latheStatusData, isLoading: isLatheStatusLoading } = useSWR("/api/lathe", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: weldStatusData, isLoading: isWeldStatusLoading } = useSWR("/api/weld", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: assyStatusData, isLoading: isAssyStatusLoading } = useSWR("/api/assy", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: paintStatusData, isLoading: isPaintStatusLoading } = useSWR("/api/paint", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
   // ข้อมูลจำลองสำหรับแสดงผล (ในอนาคตเปลี่ยนเป็น useSWR ดึงจาก API)
   const performanceData = [
     { id: "CNC-01", line: "A", perf: cncStatusData ? cncStatusData.perf : 0, target: 85, actual: 95, status: "running", oee: cncStatusData ? cncStatusData.oee : 0 },

@@ -3,31 +3,34 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import useSWR from "swr";
+import { useSystemConfig } from '@/hooks/useConfig';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function OEEDashboard() {
   const [mounted, setMounted] = useState(false);
+  const { refreshInterval, isLoading: isConfigLoading } = useSystemConfig();
+
 
   // --- 1. Fetching Data (จากโค้ดเดิมของคุณ) ---
-  const { data: overallData, error: overallError, isLoading: isOverallLoading } = useSWR("/api/overall", fetcher, { refreshInterval: 1000 });
-  const { data: availabilityData, isLoading: isAvailabilityLoading } = useSWR("/api/availability", fetcher, { refreshInterval: 1000 });
-  const { data: performanceData, isLoading: isPerformanceLoading } = useSWR("/api/performance", fetcher, { refreshInterval: 1000 });
-  const { data: qualityData, isLoading: isQualityLoading } = useSWR("/api/quality", fetcher, { refreshInterval: 1000 });
+  const { data: overallData, error: overallError, isLoading: isOverallLoading } = useSWR("/api/overall", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: availabilityData, isLoading: isAvailabilityLoading } = useSWR("/api/availability", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: performanceData, isLoading: isPerformanceLoading } = useSWR("/api/performance", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: qualityData, isLoading: isQualityLoading } = useSWR("/api/quality", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
 
-  const { data: cncStatusData, isLoading: isMachineStatusLoading } = useSWR("/api/cnc", fetcher, { refreshInterval: 1000 });
-  const { data: pressStatusData, isLoading: isPressStatusLoading } = useSWR("/api/press", fetcher, { refreshInterval: 1000 });
-  const { data: latheStatusData, isLoading: isLatheStatusLoading } = useSWR("/api/lathe", fetcher, { refreshInterval: 1000 });
-  const { data: weldStatusData, isLoading: isWeldStatusLoading } = useSWR("/api/weld", fetcher, { refreshInterval: 1000 });
-  const { data: assyStatusData, isLoading: isAssyStatusLoading } = useSWR("/api/assy", fetcher, { refreshInterval: 1000 });
-  const { data: paintStatusData, isLoading: isPaintStatusLoading } = useSWR("/api/paint", fetcher, { refreshInterval: 1000 });
+  const { data: cncStatusData, isLoading: isMachineStatusLoading } = useSWR("/api/cnc", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: pressStatusData, isLoading: isPressStatusLoading } = useSWR("/api/press", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: latheStatusData, isLoading: isLatheStatusLoading } = useSWR("/api/lathe", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: weldStatusData, isLoading: isWeldStatusLoading } = useSWR("/api/weld", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: assyStatusData, isLoading: isAssyStatusLoading } = useSWR("/api/assy", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const { data: paintStatusData, isLoading: isPaintStatusLoading } = useSWR("/api/paint", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
 
-  const {data: breakdownData, isLoading: isBreakdownLoading} = useSWR("/api/breakdown", fetcher, { refreshInterval: 1000 });
-  const {data: changeoverData, isLoading: isChangeoverLoading} = useSWR("/api/changeover", fetcher, { refreshInterval: 1000 });
-  const {data: smallStopsData, isLoading: isSmallStopsLoading} = useSWR("/api/smallStop", fetcher, { refreshInterval: 1000 });
-  const {data: reducedSpeedData, isLoading: isReducedSpeedLoading} = useSWR("/api/reducedSpeed", fetcher, { refreshInterval: 1000 });
-  const {data: startupRejectsData, isLoading: isStartupRejectsLoading} = useSWR("/api/startupReject", fetcher, { refreshInterval: 1000 });
-  const {data: prodRejectsData, isLoading: isProdRejectsLoading} = useSWR("/api/prodReject", fetcher, { refreshInterval: 1000 });
+  const {data: breakdownData, isLoading: isBreakdownLoading} = useSWR("/api/breakdown", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const {data: changeoverData, isLoading: isChangeoverLoading} = useSWR("/api/changeover", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const {data: smallStopsData, isLoading: isSmallStopsLoading} = useSWR("/api/smallStop", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const {data: reducedSpeedData, isLoading: isReducedSpeedLoading} = useSWR("/api/reducedSpeed", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const {data: startupRejectsData, isLoading: isStartupRejectsLoading} = useSWR("/api/startupReject", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
+  const {data: prodRejectsData, isLoading: isProdRejectsLoading} = useSWR("/api/prodReject", fetcher, { refreshInterval: isConfigLoading ? 0 : refreshInterval });
 
 
   // ข้อมูลจำลองสำหรับ Machine Board & Alerts (ตามรูปที่เพิ่มมา)
